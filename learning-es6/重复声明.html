@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var 可以重复声明 let const不能重复声明
+
+        // var a = 1;
+
+        // var a = 5;
+
+        let a = 1;
+
+        let a = 5;
+        //会报 Uncaught SyntaxError: Identifier 'a' has already been declared
+        //const 也是一样的
+        alert(a);
+    </script>
+</body>
+
+</html>

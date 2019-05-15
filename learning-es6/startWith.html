@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //判断网页地址
+        let url = "http://www.google.com"
+
+        function show(){
+            if(url.startsWith("http")){
+                alert("网页")
+            }else if(url.startsWith("https")){
+                alert("加密网页")
+            }else if(url.startsWith("git")){
+                alert("git地址")
+            }
+        }
+        show();
+    </script>
+</body>
+</html>

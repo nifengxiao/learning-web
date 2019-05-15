@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //把标题和内容插入到html格式的字符串中
+        let title = "标题";
+        let content = "内容";
+
+        let str = `<div>
+        <h1>${title}</h1>
+        <p>${content}</p>
+        </div>`
+
+        //""是不能折行的
+        // let str = "sss
+        // dad"
+
+        document.write(str);
+    </script>
+</body>
+</html>

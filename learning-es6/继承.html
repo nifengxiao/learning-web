@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //es5
+        // function User(name,sex){
+        //     this.name = name;
+        //     this.sex = sex;
+        // }
+        
+        // User.prototype.showName = function (){
+        //     alert(this.name);
+        // }
+
+        // User.prototype.showSex = function (){
+        //     alert(this.sex);
+        // }
+        
+        //es5继承
+        // function Student(name,sex,num){
+        //     User.call(this,name,sex);
+        //     this.num = num;
+        // }
+
+        // Student.prototype = new User();
+        // Student.prototype.constructor = User;
+
+        // Student.prototype.showNum = function (){
+        //     alert(this.num);
+        // }
+        
+
+
+        //es6
+        class User{
+            constructor(name,sex){
+                this.name = name;
+                this.sex = sex;
+            }
+
+            showName(){
+                alert(this.name);
+            }
+
+            showSex(){
+                alert(this.sex);
+            }
+        }
+
+        class Student extends User{
+            constructor(user,sex,num){
+                super(user,sex)
+                this.num = num
+            }
+            
+            showNum(){
+                alert(this.num)
+            }
+        }
+
+
+        // var user = new User("小明","男");
+        // user.showSex();
+        // user.showName();
+
+        var stu = new Student("小明","男","11");
+        stu.showName();
+        stu.showSex();
+        stu.showNum();
+    </script>
+</body>
+</html>

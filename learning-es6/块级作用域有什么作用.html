@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div>
+        <input type="button" value="1">
+        <input type="button" value="2">
+        <input type="button" value="3">
+    </div>
+
+    <script>
+        window.onload = function () {
+            var btn = document.getElementsByTagName('input');
+            //这里 如果用 var 就会全部变为 3
+            //用let 就可以恢复正常
+            for (let index = 0; index < btn.length; index++) {
+                btn[index].onclick = function () {
+                    alert(index);
+                }
+            }
+
+            //以前的解决方式
+            // for (var index = 0; index < btn.length; index++) {
+            //     (function (index) {
+            //         btn[index].onclick = function () {
+            //             alert(index);
+            //         }
+            //     }
+            //     )(index)
+            // }
+        }
+    </script>
+</body>
+
+</html>

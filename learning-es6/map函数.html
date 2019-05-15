@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let a = [1,2,3,4];
+        
+        //取值
+        // let b = a.map(function (item){
+        //     alert(item);
+        // })
+        // alert(b); //此时的b是逗号，因为没有指定返回值。
+        
+        //指定返回值
+        // let b = a.map(function (item){
+        //     return item
+        // })
+        // alert(b); //此时的b是 1,2,3,4
+
+        // //箭头函数
+        // let b = a.map((item)=>{
+        //     return item
+        // })
+        // alert(b); //此时的b是 1,2,3,4
+
+        //箭头函数简写
+        // let b = a.map(item=>item)
+        // alert(b); //此时的b是 1,2,3,4
+
+        //箭头函数简写并改变相应的值
+        let b = a.map(item=>item*2)
+        alert(b); //此时的b是 2,4,6,8
+    </script>
+</body>
+</html>

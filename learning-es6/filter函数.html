@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>filter函数</title>
+</head>
+<body>
+    <script>
+        //过滤
+        //返回值 true 不过滤 false 过滤
+
+        //过滤不能被2整除的值
+        // let arr = [1,2,3,4,5,6]
+        // let result = arr.filter(function (item){
+        //     return item%2 == 0;
+        // })
+        
+        //箭头函数简写
+        // let arr = [1,2,3,4,5,6]
+        // let result = arr.filter(item=>item%2 == 0)
+        // alert(result);
+
+        //小例子
+        //把json中小于10000块的东西给过滤掉
+        let arr=[
+            {title:"包",price:20000},
+            {title:"手表",price:12000},
+            {title:"键盘",price:2000},
+            {title:"鼠标",price:20}
+        ]
+        var result = arr.filter(json=>json.price>=10000);
+        console.log(result);
+
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //收集数组
+        //args 会作为数组被解开后的形式存在
+        //注意：Rest参数必须是最后一个形式参数
+        //否则会报错Uncaught SyntaxError: Rest parameter must be last formal parameter
+        // function show(a,b,...args){
+        //     alert(a)
+        //     alert(b)
+        //     alert(args)
+        // }
+        // window.onload = show(1,2,3,3,4)
+
+        //展开数组
+        // 如 let arr = [1,2,3];  
+        // ...arr ==> 1,2,3
+
+        //展开数组1
+        // let arr = [1,2,3];
+
+        // function show(a,b,c){
+        //     alert(a);
+        //     alert(b);
+        //     alert(c);
+        // }
+        // // show(1,2,3);
+        // show(...arr)
+
+        // 展开数组2
+        // let arr1 = [1,2,3];
+        // let arr2 = [4,5,6];
+        // let arr = [...arr1,...arr2];
+        // alert(arr)
+
+        // 展开数组3 (注意：...不能拿来赋值)
+        // let a;
+        // let arr = [1,2,3];
+        // a = ...arr;
+
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //es5
+        // function User(name,sex){
+        //     this.name = name;
+        //     this.sex = sex;
+        // }
+        
+        // User.prototype.showName = function (){
+        //     alert(this.name);
+        // }
+
+        // User.prototype.showSex = function (){
+        //     alert(this.sex);
+        // }
+        
+        //es6
+        class User{
+            constructor(user,name){
+                this.name = name;
+                this.user = user;
+            }
+
+            showName(){
+                alert(this.name);
+            }
+
+            showSex(){
+                alert(this.user);
+            }
+        }
+
+        var user = new User("小明","男");
+        user.showSex();
+        user.showName();
+    </script>
+</body>
+</html>
