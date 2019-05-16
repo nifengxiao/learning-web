@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+    <script>
+        async function readData(){
+            let data1 = await $.ajax({url:"../data/arr.text",dataType:'json'});
+            let data2 = await $.ajax({url:"../data/obj.text",dataType:'json'});
+            console.log(data1);
+            console.log(data2);
+        }
+        readData();
+    </script>
+</body>
+</html>

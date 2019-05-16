@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Generator</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+    <script>
+        //1、用generator实现简单的例子
+        // function* show() {
+        //     alert("1");
+
+        //     yield;
+
+        //     alert("2");
+        // }
+
+        // let gen =show();
+        // gen.next();
+        // gen.next();
+
+        //2、用yield传参
+        //第一部分的函数传参靠直接往方法里面传
+        // function* show() {
+        //     alert("1");
+
+        //     let a =  yield;
+
+        //     alert(a);
+        // }
+
+        // let gen =show();
+        // gen.next(); //这个地方是没法传参的
+        // gen.next(6);
+
+        //3、用yield返回参数
+        //最后一部分的返回参数靠return
+        // function* show() {
+        //     console.log(1)
+
+        //     yield 2;
+
+        //     console.log(2)
+        // }
+
+        // let gen =show();
+
+        // let a = gen.next();
+        // console.log(a) //{done: true,value: 2}
+        // let b = gen.next();
+        // console.log(b) //{done: true,value: undefined}
+
+        //4、在异步中的简单应用(配合ajax食用)
+        function *get(url) {
+            let promise =yield $.ajax({url,dataType: 'json'})
+        }
+        let gen = get("../data/arr.text");
+        var promise = gen.next();
+        promise.value.then(result=>{
+            console.log(result)
+        },err=>{
+            console.log(err)
+        })
+        
+    </script>
+
+</body>
+
+</html>

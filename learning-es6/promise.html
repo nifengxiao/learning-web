@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+    <script>
+        //这里由于有ajax请求，为了预览效果，在vscode中安装了一个Live Server
+        //1、用Promise实现简单的异步请求
+        // let p = new Promise((resolve, reject) => {
+        //     $.ajax({
+        //         url: '../data/rr.text',
+        //         dataType: 'json',
+        //         success(arr) {
+        //             resolve(arr);
+        //         },
+        //         error(err) {
+        //             reject(err);
+        //         }
+        //     })
+        // })
+
+        // p.then(result=>{
+        //     alert('成功'+result)
+        // },err=>{
+        //     console.log(err)
+        // })
+
+        //2、封装网络请求
+        // function createPromise(url) {
+        //     return new Promise((resolve, reject) => {
+        //         $.ajax({
+        //             url,
+        //             dataType: 'json',
+        //             success(result) {
+        //                 resolve(result);
+        //             },
+        //             error(err) {
+        //                 reject(err);
+        //             }
+        //         })
+        //     })
+        // }
+
+        //all
+        // Promise.all([
+        //     createPromise("../data/arr.text"),
+        //     createPromise("../data/obj.text")
+        //     ]).then(result => {
+        //     console.log(result[0]);
+        //     console.log(result[1]);
+        // }, err => {
+        //     console.log(err);
+        // })
+
+        //3、最佳用法
+        //因为这个ajax返回的是promise对象，所以
+        // Promise.all([
+        //     $.ajax({url:"../data/arr.text",dataType:'json'}),
+        //     $.ajax({url:"../data/obj.text",dataType:'json'})
+        // ]).then(result => {
+        //     console.log(result[0]);
+        //     console.log(result[1]);
+        // }, err => {
+        //     console.log(err);
+        // })
+
+
+        //race
+        Promise.race([
+            $.ajax({url:"../data/arr.text",dataType:'json'}),
+            $.ajax({url:"../data/obj.text",dataType:'json'})
+        ]).then(result => {
+            console.log(result);
+        }, err => {
+            console.log(err);
+        })
+    </script>
+</body>
+
+</html>
