@@ -38,11 +38,11 @@
 
     - 原生的var  只有函数才是它的作用域
 
-      ![1557898665580](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1557898665580.png)
+      ![1557898665580](..\screenshot\1557898665580.png)
 
     - 现在
 
-      ![1557898698618](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1557898698618.png)
+      ![1557898698618](..\screenshot\1557898698618.png)
 
     - 避免重复声明导致项目混乱
 
@@ -72,7 +72,7 @@
 
   - 如：
 
-    ![1557906394996](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1557906394996.png)
+    ![1557906394996](..\screenshot\1557906394996.png)
 
 - 数组（以下函数，都需要传一个方法）
 
@@ -271,7 +271,7 @@
         
         - 使用
           
-          ![1558000642108](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1558000642108.png)
+          ![1558000642108](..\screenshot\1558000642108.png)
           
         - 第一部分的函数传参靠直接往方法里面传
         
@@ -279,7 +279,7 @@
         
         - 使用
           
-          ![1558000656948](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1558000656948.png)
+          ![1558000656948](..\screenshot\1558000656948.png)
           
         - 最后一部分的返回参数靠return
   

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>一个简单的品牌管理案例</title>
+    <!-- 这里引入了一个bootstrap的css-->
+    <!-- https://getbootstrap.com/docs/3.3/getting-started/-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<!-- 补充 -->
+<!-- 这里用到了vscode的Bootstrap 3 Snippets插件 -->
+
+<!-- 思路 -->
+<!-- 1. 先创建一个表,然后有 id name Ctime Operation 四个表头 -->
+<!-- 2. 创建假数据,然后用v-for添加到表中,最后一列的单元格用a标签创建btn-->
+<!-- 3. 先创建一个表,然后有 id name Ctime Operation 四个表头 -->
+<!-- 4. 在表上面添加一个panel,panel中可添加id,name,也可过滤-->
+<!-- 5. 实现添加的点击事件-->
+<!-- 6. 实现添加的删除事件-->
+<!-- 7. 添加过滤-->
+<!-- 8. 实现过滤功能-->
+<body>
+    <div id="app">
+        
+        <!-- 这个panel的生成方式 bs3-panel:primary -->
+        <div class="panel panel-primary">
+              <div class="panel-heading">
+                    <h3 class="panel-title">添加品牌</h3>
+              </div>
+              <!-- form-inline:让子元素并排放置 -->
+              <div class="panel-body" form-inline>
+                    <label >id: <input type="text" class="form-control" v-model="id"></label>
+                    <label >name: <input type="text" class="form-control" v-model="name"></label>
+                    <input type="button" value="添加" @click="add">
+                    <label >搜索名称关键字: <input type="text" class="form-control" v-model="keywords"></label>
+              </div>
+        </div>
+
+        
+        <!-- 这个tab的生成方式 bs3-table:bordered -->
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>cTime</th>
+                    <th>operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in objs" :key="item.id">
+                    <td v-text="item.id">
+                    </td>
+                    <td v-text="item.name">
+                    </td>
+                    <td v-text="item.cTime">
+                    </td>
+                    <td>
+                        <a href="" @click.prevent="del(item.id)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                name:'',
+                id:'',
+                keywords:'',
+                objs: [
+                    { id: 1, name: "奔驰", cTime: new Date() },
+                    { id: 2, name: "宝马", cTime: new Date() }
+                ]
+            },
+            methods:{
+                add(){
+                    this.objs.push({ id: this.id, name: this.name, cTime: new Date() })
+                    this.id = this.name = '';
+                },
+
+                del(id){
+                    //思路
+                    //1. 根据id找索引
+                    //2. 找到索引后,直接调用数组的splice方法
+
+                    //用some,返回true终止循环
+                    // this.objs.some((item,i) => {
+                    //     if(id == item.id){
+                    //         this.objs.splice(i,1);
+                    //         return true;
+                    //     }
+                    // });
+
+                    //用findIndex,返回true时停止循环,返回索引
+                    var index = this.objs.findIndex(item=>{
+                        if(item.id == id){
+                            return true
+                        }
+                    })
+                    this.objs.splice(index,1);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

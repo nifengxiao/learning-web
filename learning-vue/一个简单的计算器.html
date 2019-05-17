@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>一个简单的计算器</title>
+</head>
+
+<!-- 思路分析 -->
+<!-- 1. 先画出两个输入框、一个符号选择器、一个等号按钮、一个结果显示文本框 -->
+<!-- 2. data中需要4个值，两个数字n1、n2，一个符号 opt，一个结果 result -->
+<!-- 3. 实现符号选择 + - * / ,并给opt赋值-->
+<!-- 4. 实现 = 号的计算逻辑-->
+
+<!-- 补充：oninput = "value=value.replace(/[^\d]/g,'')" 限制输入框只能输入数字 -->
+<body>
+
+    <div id="app">
+        <input type="text" v-model="n1" oninput = "value=value.replace(/[^\d]/g,'')">
+        <select v-model="opt">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="text" v-model="n2" oninput = "value=value.replace(/[^\d]/g,'')">
+        <input type="button" value="=" @click="calculate">
+        <span>{{result}}</span>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                n1: 0,
+                n2: 0,
+                opt: "+",
+                result: 0
+            },
+            methods: {
+                calculate() {
+                    switch (this.opt) {
+                        case "+":
+                            this.result = parseInt(this.n1) + parseInt(this.n2)
+                            break;
+                        case "-":
+                            this.result = parseInt(this.n1) - parseInt(this.n2)
+                            break;
+                        case "*":
+                            this.result = parseInt(this.n1) * parseInt(this.n2)
+                            break;
+                        case "/":
+                            this.result = parseInt(this.n1) / parseInt(this.n2)
+                            break;
+                    }
+
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

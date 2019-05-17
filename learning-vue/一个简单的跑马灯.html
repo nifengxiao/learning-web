@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>一个简单的跑马灯</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<!-- 思路分析 -->
+<!-- 1. 先画出两个按钮，一个开始，一个停止，然后画跑马灯主体 -->
+<!-- 2. 给两个按钮分别加上点击事件 开始和停止 -->
+<!-- 3. 实现开始方法，通过substring截取第一个字符然后放到最后,并修改字符串-->
+<!-- 4. 用计时器setInterval自动循环执行开始方法-->
+<!-- 5. 实现stop方法,点击后,停止计时器-->
+<!-- 6. 通过判空解决setInterval不断创建实例问题,stop后将实例化的计时器置空-->
+
+<body>
+    <div id="app">
+        <input type="button" value="开始" @click="start">
+        <input type="button" value="停止" @click="stop">
+        <br>
+        <span>
+            {{msg}}
+        </span>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello world!',
+                interval: null
+            },
+            methods: {
+                start(){
+                    if(this.interval!=null){
+                        return
+                    }
+                    this.interval = setInterval(() => {
+                        let start = this.msg.substring(0, 1);
+                        let end = this.msg.substring(1);
+                        this.msg = end + start;
+                    }, 100);
+                },
+                stop() {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

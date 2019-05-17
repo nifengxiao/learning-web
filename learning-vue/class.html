@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>class</title>
+
+
+    <style>
+        .italic {
+            font-style: italic;
+        }
+
+        .textColor {
+            color: aqua;
+        }
+
+        .textSize {
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 使用数组的方式 -->
+        <p :class="['italic','textColor','textSize']">
+            使用数组的方式
+        </p>
+
+        <!-- 数组中使用三元表达式-->
+        <p :class="[isitalic?'italic':'','textColor','textSize']">
+            数组中使用三元表达式
+        </p>
+
+        <!-- 数组中嵌套对象 -->
+        <p :class="[{italic:isitalic},'textColor','textSize']">
+            数组中嵌套对象
+        </p>
+
+        <!-- 直接使用对象 -->
+        <p :class="{ italic:true,textColor:true,textSize:true}">
+            直接使用对象
+        </p>
+
+        <!-- 直接使用对象写到data里面 -->
+        <p :class="style">
+            直接使用对象写到data里面
+        </p>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello world!',
+                isitalic: true,
+                style: { italic: true, textColor: true, textSize: true }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

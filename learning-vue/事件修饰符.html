@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>事件修饰符</title>
+    <style>
+        .outter{
+            background-color: aqua;
+            height: 200px;
+            width: 200px;
+            display: flex;
+            float: left;
+            margin: 5px
+        }
+        .inner{
+            float: right;
+            margin: auto;
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!--stop-->
+        <p class="outter" @click="show1">
+                <input class="inner" type="button" value="stop" @click.stop="show2">
+        </p>
+
+        <!-- once -->
+        <p class="outter" @click="show1">
+            <input class="inner" type="button" value="once" @click.once="show2">
+        </p>
+
+        <!-- self -->
+        <p class="outter" @click.self="show1">
+                <input class="inner" type="button" value="self" @click="show2">
+        </p>
+
+        <!--capture-->
+        <p class="outter" @click.capture="show1">
+                <input class="inner" type="button" value="capture" @click="show2">
+        </p>
+
+        <!--prevent-->
+        <p class="outter" @click="show1">
+                <a href="http://www.google.com" class="inner" @click.prevent="show2" >点我不会去google<br>(prevent阻止了默认行为)</a>
+        </p>
+        
+        
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello world!'
+            },
+            methods:{
+                show1(){
+                    console.log("触发了outter")
+                },
+                show2(){
+                    console.log("触发了inner")
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>内联样式</title>
+    
+</head>
+
+<body>
+    <div id="app">
+        <!-- 直接通过对象的形式写到属性中 -->
+        <!-- 补充： json键值对中如果有短横线，必须用引号包裹 -->
+        <p :style="{'font-size': '20px',color:'red'}">
+            直接通过对象的形式写到属性中
+        </p>
+
+        <!-- 写到data中 -->
+        <p :style="style">
+            写到data中
+        </p>
+
+        <!-- 多个样式 -->
+        <p :style="[style,style2]">
+            写到data中
+        </p>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                style: { 'font-size': '20px', color: 'red' },
+                style2: { 'font-style': 'italic' }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-bind</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- v-on用来绑定事件 -->
+        <input type="button" value="点击1" v-on:click = "hello">
+
+        <!-- 简写-->
+        <input type="button" value="点击2" @click = "hello">
+
+        <!-- 鼠标覆盖 -->
+        <input type="button" value="鼠标放上面" @mouseover = "hello">
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello world!'
+            },
+            methods:{
+                hello(){
+                    alert(this.msg)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

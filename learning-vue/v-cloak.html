@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-cloak</title>
+
+    <!-- 用v-cloak解决闪烁问题 -->
+    <style>
+        [v-cloak]{
+           display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak>
+        {{ msg }}
+    </div>
+    
+    <!-- 这里放这个地方是为了延迟加载，看闪烁的效果，正常的写法是写在head里面的 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data:{
+                msg:'hello world!'
+            }
+        })
+    </script>
+
+</body>
+</html>

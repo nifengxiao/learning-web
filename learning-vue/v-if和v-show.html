@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>v-if和v-show</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- 具体区别需要调试看elements的变化 -->
+       <input type="button"  value="toggle" @click="flag=!flag">
+       <h3 v-if="flag">这是用v-if控制的元素</h3>
+       <h3 v-show="flag">这是用v-show控制的元素</h3>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+               flag:true,
+            }
+        })
+    </script>
+</body>
+
+</html>

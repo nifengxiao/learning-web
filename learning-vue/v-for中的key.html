@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>v-for中的key</title>
+</head>
+
+<body>
+    <div id="app">
+        <label >
+            姓名：<input type="text" v-model="name">
+        </label>
+        
+        <label>
+                年龄: <input type="text" v-model="age">
+        </label>
+        
+        <input type="button" value="添加" @click="add">
+        <p v-for="item in objs" :key="item">
+            <input type="checkbox">
+                {{item.name}}------{{item.age}}岁
+            </input>
+        </p>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                name:'',
+                age:'',
+                objs: [
+                    { name: "小明", age: 21 },
+                    { name: "小白", age: 22 },
+                    { name: "小花", age: 23 }
+                ]
+            },
+            methods:{
+                add(){
+                    //添加
+                    // this.objs.push({name:this.name,age:this.age})
+                    
+                    //反着添加
+                    this.objs.unshift({name:this.name,age:this.age})
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
