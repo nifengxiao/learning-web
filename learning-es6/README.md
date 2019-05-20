@@ -83,12 +83,26 @@
 
 - 字符串
   - startsWith 判断开头
+  
   - endWith 判断结尾
+  
   - 字符串模板 
     - 语法：`${str}`
-    - 把字符串直接塞到字符串里面 
+  - 把字符串直接塞到字符串里面 
     - 可以折行
-
+    
+  - padStart和padEnd
+  
+    - 语法
+  
+      ```javascript
+      str.padStart(targetLength，padString)
+      ```
+  
+      targetLength：当前字符串需要填充到的目标长度
+  
+      padString：填充字符串，如果字符串太长，使填充后的字符串长度超过了目标长度，则只保留最左侧的部分，其他部分会被截断。
+  
 - es6面向对象
 
   - 和es5

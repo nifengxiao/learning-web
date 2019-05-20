@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        {{message | msgFormat('天真','无邪') | add}}
+    </div>
+
+    <div id="app2">
+        {{message | msgFormat('天真') }}
+    </div>
+
+    <script>
+        //定义一个全局过滤器，把所有单纯换为天真
+        //补充 replace 
+        //参考https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+        //语法 var newStr = str.replace(regexp|substr, newSubstr|function)
+        // 传substr 只会替换第一项
+        // Vue.filter('msgFormat',function(msg){
+        //     return msg.replace('单纯',"天真");
+        // })
+
+        //传regexp 会替换所有项
+        // Vue.filter('msgFormat',function(msg){
+        //     return msg.replace(/单纯/g,"天真");
+        // })
+
+        //过滤器传参数
+        // Vue.filter('msgFormat',function(msg,arg){
+        //     return msg.replace(/单纯/g,arg);
+        // })
+
+        //过滤器传多参数
+        Vue.filter('msgFormat', function (msg, arg1, arg2) {
+            return msg.replace(/单纯/g, arg1 + arg2);
+        })
+
+        //过滤器2
+        Vue.filter('add', function (msg) {
+            return msg + "。";
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                message: "小明是一个单纯的小朋友，单纯得不能再单纯了"
+            },
+        })
+
+    
+        //定义私有过滤器
+        var vm2 = new Vue({
+            el: "#app2",
+            data: {
+                message: "小明是一个单纯的小朋友，单纯得不能再单纯了"
+            },
+            filters:{
+                msgFormat:function(msg,arg1){
+                    return msg.replace(/单纯/g, arg1);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-focus v-color="'green'">
+        <input type="text" >
+    </div>
+
+    <div id="app2">
+        <p v-fontweight="1000" v-fontsize= "30">
+            123123123
+        </p> 
+    </div>
+
+    <script>
+
+        //自定义全局指令
+
+        //让元素获取焦点
+        Vue.directive('focus',{
+            // bind(el){ //元素只有在插入DOM之后，才可以调用它的行为，如focus。而行为是在界面中调用的，所以这里获取焦点无效
+            //     el.focus()
+            // },
+            inserted(el){
+                el.focus()
+            }
+        })
+
+         //让元素更换字体颜色
+         Vue.directive('color',{
+             //style只要通过指令绑定给了元素，不管这个元素有没有插入到页面中，这个元素肯定就有了一个内联的样式
+             //将来元素肯定会显示到页面中，这时，浏览器的渲染引擎必然会解析样式，应用给这个元素
+            // bind(el){
+            //     el.style.color="red"
+            // }
+
+            //传值
+            bind(el,binding){
+                el.style.color=binding.value;
+            }
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+               
+            }
+        })
+
+        var vm = new Vue({
+            el: "#app2",
+            //私有自定义指令
+            directives:{
+                'fontweight':{
+                    bind(el,binding){
+                        el.style.fontWeight = binding.value;
+                    }
+                },
+                //简写
+                'fontsize': function(el,binding){
+                    el.style.fontSize = parseInt( binding.value)+'px';
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

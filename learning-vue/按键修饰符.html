@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- <label>
+            按enter更换下面的字：<input type="text" @keyup.enter="change()" v-model="message2">
+        </label> -->
+
+        <label>
+            按f12更换下面的字：<input type="text" @keyup.f12="change()" v-model="message2">
+        </label>
+
+        <p>
+            {{message}}
+        </p>
+    </div>
+
+    <script>
+        //自定义按键修饰符别名
+       Vue.config.keyCodes.f12 = 123
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                message: "hello world!",
+                message2: ""
+            },
+            methods: {
+                change() {
+                    this.message = this.message2;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

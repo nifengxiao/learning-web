@@ -167,7 +167,7 @@
   	2. 数组中使用三元表达式
   	3. 数组中嵌套对象
   	4. 直接使用对象
-		   - 注意
+				   - 注意
   	     - 可以在data中定义这个对象，然后使用
   
 - 使用内联表达式
@@ -194,3 +194,223 @@
   - 调试
 
     ![1558090165922](..\screenshot\1558090165922.png)
+
+#### Vue全局过滤器
+
+- 语法
+
+  - 定义
+
+    - 在一个组件的选项中定义私有的过滤器
+
+      ```javascript
+      filters: {
+        my-filter: function (value) {
+          // 返回处理后的值
+        }
+      }
+      ```
+
+    - 在创建 Vue 实例之前全局定义过滤器
+
+      ```javascript
+      // 注册
+      Vue.filter('my-filter', function (value) {
+        // 返回处理后的值
+      })
+      ```
+
+    - 返回过滤器
+
+      ```javascript
+      // getter，返回已注册的过滤器
+      var myFilter = Vue.filter('my-filter')
+      ```
+
+    - 注意：过滤器调用的时候采用的是就近原则，如果私有和全局的过滤器名称一样，就会调用私有的。
+
+  - 使用
+
+    -  过滤器被添加在 JavaScript 表达式的尾部，由“管道”符号指示
+
+      ```html
+      <!-- 在双花括号中 -->
+      {{ str | filter }}
+      
+      <!-- 在 `v-bind` 中 -->
+      <div v-bind:id="str | filter"></div>
+      ```
+
+    - 过滤器可以串联
+
+      ```html
+      {{ message | filterA | filterB }}
+      ```
+
+    - 过滤器是 JavaScript 函数,因此可以接收参数
+
+      ```html
+      {{ message | filterA('arg1', arg2) }}
+      ```
+
+#### 按键修饰符
+
+- 作用 ：
+
+  监听键盘事件
+
+- 语法
+
+  如： enter
+
+  ```javascript
+  <!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+  <input v-on:keyup.enter="submit">
+  ```
+
+- 按键码
+
+  - 注意: `keyCode` 的事件用法[已经被废弃了](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode)并可能不会被最新的浏览器支持。
+
+  - 用法：
+
+    如:
+
+    ```html
+    <input v-on:keyup.13="submit">
+    ```
+
+  - 常用按键码别名
+
+    - `.enter`
+    - `.tab`
+    - `.delete` (捕获“删除”和“退格”键)
+    - `.esc`
+    - `.space`
+    - `.up`
+    - `.down`
+    - `.left`
+    - `.right`
+
+  - 注意:有一些按键 (`.esc` 以及所有的方向键) 在 IE9 中有不同的 `key` 值, 如果你想支持 IE9，这些内置的别名应该是首选。
+
+  - 自定义按键修饰符别名
+
+    ```js
+    // 可以使用 `@:keyup.f2`进行调用
+    Vue.config.keyCodes.f12 = 123
+    ```
+
+#### 自定义指令
+
+- 应用场景
+
+  需要对普通 DOM 元素进行底层操作，
+
+- 如:聚焦输入框
+
+  - 注册全局自定义指令
+
+    ```javascript
+    // 注册一个全局自定义指令 `v-focus`
+    Vue.directive('focus', {
+      // 当被绑定的元素插入到 DOM 中时……
+      inserted: function (el) {
+        // 聚焦元素
+        el.focus()
+      }
+    })
+    ```
+
+  - 注册局部指令
+
+    ```javascript
+    directives: {
+      focus: {
+        // 指令的定义
+        inserted: function (el) {
+          el.focus()
+        }
+      }
+    }
+    ```
+
+  - 使用
+
+    ```html
+    <input v-focus>
+    ```
+
+  - 注意：
+
+    指令名必须小写。
+
+- 钩子函数
+
+  - bind:
+
+     只调用一次，指令第一次绑定到元素时调用，在这里可以进行一次新的初始化设置。
+
+  - inserted:
+
+    只调用一次，被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)
+
+  - update:
+
+    调用多次，所在组件的 VNode 更新时调用
+
+    注意： 也可能发生在其子VNode更新之前。指令的值可能发生了改变，也可能没有。但是你可以通过比较更新前后的值来忽略不必要的模板更新。
+
+  - componentUpdated
+
+    指令所在组件的 VNode 及其子 VNode 全部更新后调用
+
+  - unbind
+
+    只调用一次，指令与元素解绑时调用
+
+- 钩子函数的参数
+
+  - `el`：指令所绑定的元素，可以用来直接操作 DOM 。
+
+  - `binding`：一个对象
+
+  - `vnode`：Vue 编译生成的虚拟节点
+
+  - `oldVnode`：上一个虚拟节点，仅在 `update` 和 `componentUpdated` 钩子中可用
+
+  - 注意：
+
+    除了 `el` 之外，其它参数都应该是只读的，切勿进行修改。如果需要在钩子之间共享数据，需要通过元素的 [`dataset`](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/dataset) 来进行。
+
+- 函数简写
+
+  如果想在 `bind` 和 `update` 时触发相同行为，而不关心其它的钩子，这是可以简写，如下：
+
+  ```JavaScript
+  Vue.directive('color-swatch', function (el, binding) {
+    el.style.backgroundColor = binding.value
+  })
+  ```
+
+#### Vue实例的生命周期
+
+- 定义
+
+  从Vue实例创建、运行、到销毁期间，总是伴随着各种各样的事件，这些事件，统称为生命周期。
+
+- 四个准备阶段，四个完成阶段
+  - beforeCreate() 
+  - created()
+  - beforeMount()
+  - mounted()
+  - beforeUpdate()
+  - updated()
+  - beforeDestory()
+  - destoryed()
+
+- 生命周期钩子 = 生命周期函数 = 生命周期事件
+
+- 生命周期图解
+
+  ![](C:\Users\Administrator\Desktop\learning-web\screenshot\lifecycle.png)
