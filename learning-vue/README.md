@@ -167,7 +167,7 @@
   	2. 数组中使用三元表达式
   	3. 数组中嵌套对象
   	4. 直接使用对象
-				   - 注意
+							   - 注意
   	     - 可以在data中定义这个对象，然后使用
   
 - 使用内联表达式
@@ -414,3 +414,766 @@
 - 生命周期图解
 
   ![](C:\Users\Administrator\Desktop\learning-web\screenshot\lifecycle.png)
+
+#### Vue-Resource（这个作者目前已经不维护了，推荐更好的框架axios）
+
+- [github地址](https://github.com/pagekit/vue-resource)
+
+- 作用
+
+  Vue 要实现异步加载需要使用到 vue-resource 库。
+
+- cdn
+
+  ```javascript
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+  ```
+
+- get请求:
+
+  - 不带参数： 
+
+    ```javascript
+    ///someUrl
+    {
+      this.$http.get('/someUrl').then(result => {
+        //成功回调
+      }, err => {
+        //失败回调
+     });
+    }
+    ```
+
+  - 带参数：
+
+    ```javascript
+    /someUrl?foo=bar
+    {
+      this.$http.get('/someUrl'，{params：{foo:'bar'}}).then(result => {
+        //成功回调
+      }, err => {
+        //失败回调
+      });
+    }
+    ```
+
+  - 带参数+请求头：
+
+    ```javascript
+    {
+      this.$http.get('/someUrl', {params: {foo: 'bar'}, headers: {'X-Custom': '...'}}).then(response => {
+        //成功回调
+      }, response => {
+        //失败回调
+      });
+    }
+    ```
+
+- post请求：
+
+  - 带参数
+
+    ```javascript
+    // /someUrl
+    {
+      this.$http.post('/someUrl', {foo: 'bar'}).then(result => {
+    	//成功回调
+      }, err => {
+       //失败回调
+      });
+    }
+    ```
+
+  - 启用emulateJSON 
+
+    - post 发送数据到后端，需要第三个参数 **{emulateJSON:true}**。
+
+    - emulateJSON 的作用： 如果Web服务器无法处理编码为 application/json 的请求，你可以启用 emulateJSON 选项。
+
+    - 使用
+
+      ```javascript
+      // /someUrl
+      {
+        this.$http.post('/someUrl', {foo: 'bar'},{emulateJSON:true}).then(result => {
+      	//成功回调
+        }, err => {
+         //失败回调
+        });
+      }
+      ```
+
+- 获取图像并使用blob（）方法从响应中提取图像主体内容。
+
+  ```javascript
+  {
+  	// GET /image.jpg
+    this.$http.get('/image.jpg', {responseType: 'blob'}).then(response => {
+      // resolve to Blob
+      return response.blob();
+    }).then(blob => {
+      // use image Blob
+    });
+  }
+  ```
+
+- 全局配置
+
+  ```
+  //全局配置根地址
+  Vue.http.options.root = '/root';
+  //全局配置emulateJSON(如果Web服务器无法处理编码为 application/json 的请求)
+  Vue.http.options.emulateJSON = true;
+  //全局配置emulateHTTP(如果Web服务器无法处理PUT，PATCH、DELETE)
+  Vue.http.options.emulateHTTP = true;
+  //全局配置Authorization
+  Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk';
+  ```
+
+  注意:
+
+  要让根地址生效，请求路径必须是一个相对路径。
+
+  `Vue.http.get('someUrl')` 正确
+
+  `Vue.http.get('/someUrl')` 错误
+
+- 拦截器
+
+  - 作用
+
+    - 添加统一的request的参数 
+      - 比如header中加入参数，
+      - 比如客户端需要实现sign和token的验证机制，
+      - 比如你可以写$http.get('/files', params)，拦截器帮你拼接成 `http://www.xxxx.com/1/files` 这样的请求地址
+    - 处理统一的responseError 
+      - 比如重连机制，拿到error.code错误码重连，
+      - 比如token过期，重新拿到token再次send request 
+      - 比如统一报错信息，给所有返回的404
+
+  - 简单使用
+
+    - 处理请求过程
+
+      ```javascript
+      Vue.http.interceptors.push(function(request) {
+        // 修改请求方式
+        request.method = 'POST';
+      
+        // 修改请求头
+        request.headers.set('X-CSRF-TOKEN', 'TOKEN');
+        request.headers.set('Authorization', 'Bearer TOKEN');
+      });
+      ```
+
+    - 请求和响应处理
+
+      ```javascript
+      Vue.http.interceptors.push(function(request) {
+      
+        // 修改请求方式
+        request.method = 'POST';
+      
+        // 返回请求响应回调
+        return function(response) {
+          //修改响应
+          //这个地方就可以做token是否过期等处理
+          response.body = '...';
+        };
+      });
+      ```
+
+    - 返回响应并停止处理
+
+      ```javascript
+      Vue.http.interceptors.push(function(request) {
+      
+        ...
+      
+        //停止和返回响应
+        return request.respondWith(body, {
+          status: 404,
+          statusText: 'Not found'
+        });
+      });
+      ```
+
+#### 组件基础
+
+- 注册
+
+  ```javascript
+  Vue.component('my-component-name', {
+    // ... options ...
+  })
+  ```
+
+- 基本实例
+
+  创建：
+
+  ```
+  // 定义一个名为 button-counter 的新组件
+  Vue.component('button-counter', {
+    data: function () {
+      return {
+        count: 0
+      }
+    },
+    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+  })
+  ```
+
+  使用：
+
+  ```
+  <button-counter></button-counter>
+  ```
+
+  说明：
+
+  - data 必须是一个函数，因此每个实例可以维护一份被返回对象的独立的拷贝。
+
+- 组件的注册
+
+  - 全局注册
+
+    ```
+    Vue.component('my-component-name', {
+      // ... options ...
+    })
+    ```
+
+  - 局部注册
+
+    ```
+    var ComponentA = { /* ... */ }
+    ```
+
+- 通过Prop向子组件传递数据
+
+  实例：
+
+  ```
+  Vue.component('blog-post', {
+    props: ['title'],
+    template: '<h3>{{ title }}</h3>'
+  })
+  ```
+
+  使用
+
+  ```html
+  <blog-post title="My journey with Vue"></blog-post>
+  ```
+
+  
+
+- 通过v-bind动态传递prop(可以在一开始不清楚要渲染的具体内容时使用,一般都会使用这个)
+
+  如：
+
+  ```javascript
+  new Vue({
+    el: '#blog-post-demo',
+    data: {
+      posts: [
+        { id: 1, title: 'My journey with Vue' },
+        { id: 2, title: 'Blogging with Vue' },
+        { id: 3, title: 'Why Vue is so fun' }
+      ]
+    }
+  })
+  ```
+  
+  渲染
+  
+  ```html
+  <blog-post
+    v-for="post in posts"
+    :key="post.id"
+    :title="post.title"
+  ></blog-post>
+  ```
+  
+- template中只能有一个根元素
+
+  - 如果多出来，就会报错**every component must have a single root element (每个组件必须只有一个根元素)**
+
+    不能这样写：
+
+    ```html
+    <h3>{{ title }}</h3>
+    <div v-html="content"></div>
+    ```
+
+    将模板的内容包裹在一个父元素内，来修复这个问题,需要这样写
+
+    <div class="blog-post">
+      <h3>{{ title }}</h3>
+      <div v-html="content"></div>
+    </div>
+
+    使用
+
+    ```
+    <blog-post
+      v-for="post in posts"
+      v-bind:key="post.id"
+      v-bind:title="post.title"
+      v-bind:content="post.content"
+    ></blog-post>
+    ```
+
+  - 但是这就看起来很复杂了，所以需要重构
+
+    ```html
+    <blog-post
+      v-for="post in posts"
+      v-bind:key="post.id"
+      v-bind:post="post"
+    ></blog-post>
+    ```
+
+    ```javascript
+    Vue.component('blog-post', {
+      props: ['post'],
+      template: `
+        <div class="blog-post">
+          <h3>{{ post.title }}</h3>
+          <div v-html="post.content"></div>
+        </div>
+      `
+    })
+    ```
+
+- 监听子组件事件
+
+  - 使用示例  让子组件的监听来控制父组件的大小
+
+    - 可以在模板中用来控制字号
+
+      ```javascript
+  new Vue({
+        ...
+      data: {
+         	....
+          postFontSize: 1
+        }
+      })
+    ```
+      
+  ```html
+      :style="{ fontSize: postFontSize + 'em' }"
+  ```
+      
+    - 父级组件可以像处理 native DOM 事件一样通过 `v-on` 监听子组件实例的任意事件
+  
+      如：
+  
+    ```html
+      <blog-post
+      ...
+        v-on:enlarge-text="postFontSize += 0.1"
+    ></blog-post>
+      ```
+  
+    - 同时子组件可以通过调用内建的 [**$emit** 方法](https://cn.vuejs.org/v2/api/#vm-emit) 并传入事件名称来触发一个事件
+  
+      如:
+
+      ```html
+    <button v-on:click="$emit('enlarge-text')">
+        Enlarge text
+      </button>
+      ```
+  
+  - 使用事件抛出一个值
+  
+  - 例如我们可能想让 `<blog-post>` 组件决定它的文本要放大多少。这时可以使用 `$emit` 的第二个参数来提供这个值：
+  
+    ```html
+      <button v-on:click="$emit('enlarge-text', 0.1)">
+        Enlarge text
+      </button>
+      ```
+  
+      然后当在父级组件监听这个事件的时候，我们可以通过 `$event` 访问到被抛出的这个值：
+
+      ```html
+      <blog-post
+        ...
+        v-on:enlarge-text="postFontSize += $event"
+      ></blog-post>
+      ```
+  
+  - 或者，如果这个事件处理函数是一个方法
+  
+    ```html
+      <blog-post
+      ...
+        v-on:enlarge-text="onEnlargeText"
+      ></blog-post>
+      ```
+
+      那么这个值将会作为第一个参数传入这个方法
+    
+      ```javascript
+      methods: {
+        onEnlargeText: function (enlargeAmount) {
+          this.postFontSize += enlargeAmount
+        }
+      }
+    ```
+  
+- 在组件上使用v-model
+  
+  - 记住一个原则:
+  
+      ```h&#39;t&#39;m&#39;l
+      <input v-model="searchText">
+    ```
+  
+    等价于：
+  
+      ```html
+      <input
+        v-bind:value="searchText"
+        v-on:input="searchText = $event.target.value"
+      >
+    ```
+  
+  - 如何使用
+  
+      如：
+  
+      ```html
+      <custom-input v-model="searchText"></custom-input>
+      ```
+  
+      拆解开来就是：
+  
+      ```html
+      <custom-input
+      v-bind:value="searchText"
+        v-on:input="searchText = $event"
+    ></custom-input>
+      ```
+
+      然后将value绑定到这个组件的input中
+  
+      ```html
+      Vue.component('custom-input', {
+        props: ['value'],
+        template: `
+          <input
+            v-bind:value="value" //将其 value 特性绑定到一个名叫 value 的 prop 上
+            v-on:input="$emit('input', $event.target.value)" //在其 input 事件被触发时，将新的值通过自定义的 input 事件抛出
+          >
+      `
+      })
+    ```
+  
+- 插槽(这里先放着)
+  
+  使用: 
+  
+  ```javascript
+    Vue.component('alert-box', {
+    template: `
+        <div class="demo-alert-box">
+          <strong>Error!</strong>
+          <slot></slot>
+        </div>
+      `
+  })
+    ```
+
+  - 动态组件(这里先放着)
+
+    - 用途：不同组件之间进行动态切换等
+  
+  - 解析DOM模板时的注意事项
+  
+    - 由于：`<li>`、`<tr>` 和 `<option>`，等只能出现在其它某些特定的元素内部。
+
+      这会导致我们使用这些有约束条件的元素时遇到一些问题
+
+      ```
+    <table>
+        <blog-post-row></blog-post-row>
+    </table>
+      ```
+
+      自定义组件 `<blog-post-row>` 会被作为无效的内容提升到外部，并导致最终渲染结果出错
+  
+      使用is特性可以解决这个问题
+  
+      ```
+      <table>
+        <tr is="blog-post-row"></tr>
+      </table>
+      ```
+  
+    - 如果使用以下来源使用模板的话，这条限制时不存在的 (没看懂，回来再看)
+  
+      例如：
+  
+      - 字符串 (例如：`template: '...'`)
+  
+      - [单文件组件 (`.vue`)](https://cn.vuejs.org/v2/guide/single-file-components.html)
+  
+      - <script type = "text/x-template">
+
+#### 深入了解组件
+
+- 组件注册
+
+  - 语法
+
+    ```javascript
+    Vue.component('my-component-name', { /* ... */ })
+    ```
+
+  - 组件名大小写
+
+    使用kebab-case
+
+    ```javascript
+    Vue.component('my-component-name', { /* ... */ })
+    ```
+
+    使用PascalCase
+
+    ```javascript
+    Vue.component('MyComponentName', { /* ... */ })
+    ```
+
+    注意：直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的,最好的方式就是写成kebab-case
+
+  - 全局注册
+
+    ```javascript
+    Vue.component('my-component-name', {
+      // ... 选项 ...
+    })
+    ```
+
+    注册之后可以用在任何新创建的 Vue 根实例 (`new Vue`) 的模板中
+
+  - 局部注册
+
+    有的情况，比如，如果你使用一个像 webpack 这样的构建系统，全局注册所有的组件意味着即便你已经不再使用一个组件了，它仍然会被包含在你最终的构建结果中。这造成了用户下载的 JavaScript 的无谓的增加。这个时候，就需要局部注册了
+
+    注册:
+
+    ```javascript
+    var ComponentA = { /* ... */ }
+    var ComponentB = { /* ... */ }
+    ```
+
+    初始化：
+
+    ```javascript
+    new Vue({
+      el: '#app',
+      components: {
+        'component-a': ComponentA，
+        'component-b': ComponentB
+      }
+    })
+    ```
+
+    注意：**局部注册的组件在其子组件中不可用**
+
+    所以,如果你希望 `ComponentA` 在 `ComponentB` 中可用，则你需要这样写：
+
+    ```javascript
+    var ComponentA = { /* ... */ }
+    
+    var ComponentB = {
+      components: {
+        'component-a': ComponentA
+      },
+      // ...
+    }
+    ```
+
+  - 模块系统:(需要后续补充)
+
+- Prop
+
+  - HTML 中的特性名是大小写不敏感的，所以浏览器会把所有大写字符解释为小写字符
+
+  - 这意味着当你使用 DOM 中的模板时，camelCase (驼峰命名法) 的 Prop名需要使用其等价的 kebab-case (短横线分隔命名) 命名：
+
+    ```javascript
+    Vue.component('blog-post', {
+      // 在 JavaScript 中是 camelCase 的
+      props: ['postTitle'],
+      template: '<h3>{{ postTitle }}</h3>'
+    })
+    ```
+
+    ```html
+    <!-- 在 HTML 中是 kebab-case 的 -->
+    <blog-post post-title="hello!"></blog-post>
+    ```
+
+    注意：如果使用字符串模板，那么这个限制就不存在了。
+
+  - Prop类型
+
+    ```javascript
+    props: {
+      title: String,
+      likes: Number,
+      isPublished: Boolean,
+      commentIds: Array,
+      author: Object,
+      callback: Function,
+      contactsPromise: Promise // or any other constructor
+    }
+    ```
+
+    用途：这不仅为组件提供了文档，还会在它们遇到错误的类型时从浏览器的 JavaScript 控制台提示用户
+
+  - 传递静态或动态Prop
+
+    - 可以静态传值，也可以通过v-bind动态赋值
+
+    - 任何类型的值都可以穿给一个prop
+
+  - 单向数据流
+
+    - 所有的 prop 都使得其父子 prop 之间形成了一个**单向下行绑定**：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。这样会防止从子组件意外改变父级组件的状态，从而导致你的应用的数据流向难以理解。
+
+    - 每次父级组件发生更新时，子组件中所有的 prop 都将会刷新为最新的值。这意味着你**不**应该在一个子组件内部改变 prop。如果你这样做了，Vue 会在浏览器的控制台中发出警告。
+
+      ![1558445907419](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1558445907419.png)
+
+    - 注意：在 JavaScript 中对象和数组是通过引用传入的，所以对于一个数组或对象类型的 prop 来说，在子组件中改变这个对象或数组本身**将会**影响到父组件的状态。
+
+  - Prop验证
+
+    为了定制 prop 的验证方式，你可以为 `props` 中的值提供一个带有验证需求的对象，而不是一个字符串数组
+
+    ```javascript
+    Vue.component('my-component', {
+      props: {
+        // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+        propA: Number,
+        // 多个可能的类型
+        propB: [String, Number],
+        // 必填的字符串
+        propC: {
+          type: String,
+          required: true
+        },
+        // 带有默认值的数字
+        propD: {
+          type: Number,
+          default: 100
+        },
+        // 带有默认值的对象
+        propE: {
+          type: Object,
+          // 对象或数组默认值必须从一个工厂函数获取
+          default: function () {
+            return { message: 'hello' }
+          }
+        },
+        // 自定义验证函数
+        propF: {
+          validator: function (value) {
+            // 这个值必须匹配下列字符串中的一个
+            return ['success', 'warning', 'danger'].indexOf(value) !== -1
+          }
+        }
+      }
+    })
+    ```
+
+    注意：prop 会在一个组件实例创建**之前**进行验证，所以实例的属性 (如 `data`、`computed` 等) 在 `default` 或 `validator` 函数中是不可用的
+
+    - 类型检查
+
+      - `type` 可以是下列原生构造函数中的一个：
+
+        - `String`
+        - `Number`
+        - `Boolean`
+        - `Array`
+        - `Object`
+        - `Date`
+        - `Function`
+        - `Symbol`
+
+      - 另外，`type` 还可以是一个自定义的构造函数，并且通过 `instanceof` 来进行检查确认
+
+        如构造函数
+
+        ```javascript
+        function Person (firstName, lastName) {
+          this.firstName = firstName
+          this.lastName = lastName
+        }
+        ```
+
+        可以使用：
+
+        ```javascript
+        Vue.component('blog-post', {
+          props: {
+            author: Person
+          }
+        })
+        ```
+
+        来验证 `author` prop 的值是否是通过 `new Person` 创建的。
+
+  - 非Prop特性
+
+    - 一个非 prop 特性是指传向一个组件，但是该组件并没有相应 prop 定义的特性。
+
+    - 对于绝大多数相同属性,从外部提供给组件的值会替换掉组件内部设置好的值，`class`和 `style` 特性会稍微智能一些，即两边的值会被合并起来
+
+    - 禁用特性继承：如果你**不**希望组件的根元素继承特性，你可以在组件的选项中设置 `inheritAttrs: false`
+
+      如：
+
+      ```javascript
+      Vue.component('my-component', {
+        inheritAttrs: false,
+        // ...
+      })
+      ```
+
+      用`inheritAttrs: false` 和 `$attrs`手动决定特性会被赋予哪个元素,在撰写[基础组件](https://cn.vuejs.org/v2/style-guide/#基础组件名-强烈推荐)的时候是常会用到的：
+
+      ```javascript
+      Vue.component('base-input', {
+        inheritAttrs: false,
+        props: ['label', 'value'],
+        template: `
+          <label>
+            {{ label }}
+            <input
+              v-bind="$attrs"
+              v-bind:value="value"
+              v-on:input="$emit('input', $event.target.value)"
+            >
+          </label>
+        `
+      })
+      ```
+
+      注意: `inheritAttrs: false` 选项**不会**影响 `style` 和 `class` 的绑定
+
+      这个模式允许你在使用基础组件的时候更像是使用原始的 HTML 元素，而不会担心哪个元素是真正的根元素：???没看懂这个地方
+
+      ```
+      
+      ```
+
+      

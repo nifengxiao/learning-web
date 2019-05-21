@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app" :style="{ fontSize: postFontSize + 'em' }">
+        <button-counter></button-counter>
+        <!-- <post  v-for="item in infos" :title="item.title" :content ="item.content" :key="item.id"></post> -->
+        <!-- <post v-for="item in infos" :post="item" :key="item.id" @enlarge-text="postFontSize += 0.1"></post> -->
+        <!-- <post v-for="item in infos" :post="item" :key="item.id" @enlarge-text="postFontSize += $event"></post> -->
+        <!-- 用方法接收子组件传过来的值 -->
+        <post v-for="item in infos" :post="item" :key="item.id" @enlarge-text="onEnlargeText"></post>
+
+        <custom-input v-model="searchText"></custom-input>
+    </div>
+
+    <script>
+        //基本使用
+        Vue.component('button-counter', {
+            data() {
+                return {
+                    count: 0
+                }
+            },
+            template: ` <button @click="count++">{{count}}</button>`
+        })
+
+        //传递数据
+        // Vue.component('post',{
+        //     props:['title','content'],
+        //     template:` <div>
+        //             <h1>{{title}}</h1>
+        //             <div>{{content}}</div>
+        //             </div>`
+        // })
+
+        //重构一下
+        // Vue.component('post',{
+        //     props:['post'],
+        //     template:` <div>
+        //             <h1>{{post.title}}</h1>
+        //             <div>{{post.content}}</div>
+        //             </div>`
+        // })
+
+        //监听子组件事件
+        // Vue.component('post', {
+        //     props: ['post'],
+        //     template: ` <div>
+        //             <h1>{{post.title}}</h1>
+        //             <div>{{post.content}}</div>
+        //             <button @click="$emit('enlarge-text')">Enlarge text</button>
+        //             </div>`
+        // })
+
+        //使用事件抛出一个值
+        Vue.component('post', {
+            props: ['post'],
+            template: ` <div>
+                    <h1>{{post.title}}</h1>
+                    <div>{{post.content}}</div>
+                    <button @click="$emit('enlarge-text',0.1)">Enlarge text</button>
+                    </div>`
+        })
+
+        //使用v-model
+        Vue.component('custom-input',{
+            props:['value'],
+            template:`
+                <input 
+                :value="value" 
+                @input="$emit('input',$event.target.value)"
+                >
+            `
+        })
+
+        new Vue({
+            el: "#app",
+            data: {
+                infos: [
+                    { id: 1, title: "title1", content: "content1" },
+                    { id: 2, title: "title2", content: "content2" }
+                ],
+                postFontSize: 1,
+                searchText:""
+            },
+            methods: {
+                onEnlargeText(enlargeAmount) {
+                    this.postFontSize += enlargeAmount;
+                }
+            }
+        })
+
+    </script>
+
+
+</body>
+
+</html>
