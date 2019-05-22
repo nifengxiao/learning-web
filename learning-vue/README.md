@@ -167,7 +167,7 @@
   	2. 数组中使用三元表达式
   	3. 数组中嵌套对象
   	4. 直接使用对象
-							   - 注意
+								   - 注意
   	     - 可以在data中定义这个对象，然后使用
   
 - 使用内联表达式
@@ -761,12 +761,14 @@
           postFontSize: 1
         }
       })
+      ```
     ```
       
+    ```
   ```html
       :style="{ fontSize: postFontSize + 'em' }"
   ```
-      
+  
     - 父级组件可以像处理 native DOM 事件一样通过 `v-on` 监听子组件实例的任意事件
   
       如：
@@ -776,14 +778,14 @@
       ...
         v-on:enlarge-text="postFontSize += 0.1"
     ></blog-post>
-      ```
+    ```
   
     - 同时子组件可以通过调用内建的 [**$emit** 方法](https://cn.vuejs.org/v2/api/#vm-emit) 并传入事件名称来触发一个事件
-  
-      如:
 
+      如:
+  
       ```html
-    <button v-on:click="$emit('enlarge-text')">
+      <button v-on:click="$emit('enlarge-text')">
         Enlarge text
       </button>
       ```
@@ -796,10 +798,10 @@
       <button v-on:click="$emit('enlarge-text', 0.1)">
         Enlarge text
       </button>
-      ```
-  
-      然后当在父级组件监听这个事件的时候，我们可以通过 `$event` 访问到被抛出的这个值：
+    ```
 
+      然后当在父级组件监听这个事件的时候，我们可以通过 `$event` 访问到被抛出的这个值：
+  
       ```html
       <blog-post
         ...
@@ -813,9 +815,9 @@
       <blog-post
       ...
         v-on:enlarge-text="onEnlargeText"
-      ></blog-post>
-      ```
-
+    ></blog-post>
+    ```
+  
       那么这个值将会作为第一个参数传入这个方法
     
       ```javascript
@@ -824,7 +826,7 @@
           this.postFontSize += enlargeAmount
         }
       }
-    ```
+      ```
   
 - 在组件上使用v-model
   
@@ -841,7 +843,7 @@
         v-bind:value="searchText"
         v-on:input="searchText = $event.target.value"
       >
-    ```
+      ```
   
   - 如何使用
   
@@ -858,7 +860,7 @@
       v-bind:value="searchText"
         v-on:input="searchText = $event"
     ></custom-input>
-      ```
+    ```
 
       然后将value绑定到这个组件的input中
   
@@ -872,7 +874,7 @@
           >
       `
       })
-    ```
+      ```
   
 - 插槽(这里先放着)
   
@@ -887,7 +889,7 @@
         </div>
       `
   })
-    ```
+  ```
 
   - 动态组件(这里先放着)
 
@@ -900,19 +902,21 @@
       这会导致我们使用这些有约束条件的元素时遇到一些问题
 
       ```
+      
+      ```
     <table>
         <blog-post-row></blog-post-row>
-    </table>
+</table>
       ```
-
+  
       自定义组件 `<blog-post-row>` 会被作为无效的内容提升到外部，并导致最终渲染结果出错
   
       使用is特性可以解决这个问题
-  
+    
       ```
       <table>
         <tr is="blog-post-row"></tr>
-      </table>
+    </table>
       ```
   
     - 如果使用以下来源使用模板的话，这条限制时不存在的 (没看懂，回来再看)
@@ -922,25 +926,20 @@
       - 字符串 (例如：`template: '...'`)
   
       - [单文件组件 (`.vue`)](https://cn.vuejs.org/v2/guide/single-file-components.html)
-  
+    
       - <script type = "text/x-template">
+      ```
 
 #### 深入了解组件
 
 - 组件注册
 
-  - 语法
-
-    ```javascript
-    Vue.component('my-component-name', { /* ... */ })
-    ```
-
   - 组件名大小写
 
     使用kebab-case
-
+  
     ```javascript
-    Vue.component('my-component-name', { /* ... */ })
+  Vue.component('my-component-name', { /* ... */ })
     ```
 
     使用PascalCase
@@ -952,55 +951,55 @@
     注意：直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的,最好的方式就是写成kebab-case
 
   - 全局注册
-
+  
     ```javascript
-    Vue.component('my-component-name', {
+  Vue.component('my-component-name', {
       // ... 选项 ...
-    })
+  })
     ```
 
     注册之后可以用在任何新创建的 Vue 根实例 (`new Vue`) 的模板中
-
+  
   - 局部注册
-
+  
     有的情况，比如，如果你使用一个像 webpack 这样的构建系统，全局注册所有的组件意味着即便你已经不再使用一个组件了，它仍然会被包含在你最终的构建结果中。这造成了用户下载的 JavaScript 的无谓的增加。这个时候，就需要局部注册了
 
     注册:
 
     ```javascript
-    var ComponentA = { /* ... */ }
+  var ComponentA = { /* ... */ }
     var ComponentB = { /* ... */ }
-    ```
-
-    初始化：
-
+  ```
+  
+  初始化：
+  
     ```javascript
     new Vue({
       el: '#app',
-      components: {
+    components: {
         'component-a': ComponentA，
-        'component-b': ComponentB
+      'component-b': ComponentB
       }
     })
     ```
-
+  
     注意：**局部注册的组件在其子组件中不可用**
-
-    所以,如果你希望 `ComponentA` 在 `ComponentB` 中可用，则你需要这样写：
-
+  
+    所以,如果你希望 `ComponentA` 在注册 `ComponentB`的时候可用，则你需要这样写：
+  
     ```javascript
-    var ComponentA = { /* ... */ }
+  var ComponentA = { /* ... */ }
     
-    var ComponentB = {
+  var ComponentB = {
       components: {
-        'component-a': ComponentA
+      'component-a': ComponentA
       },
       // ...
     }
     ```
-
+  
   - 模块系统:(需要后续补充)
-
+  
 - Prop
 
   - HTML 中的特性名是大小写不敏感的，所以浏览器会把所有大写字符解释为小写字符
@@ -1022,8 +1021,10 @@
 
     注意：如果使用字符串模板，那么这个限制就不存在了。
 
-  - Prop类型
+  - Prop类型:
 
+    以对象的形式列出prop，可以指定prop的类型
+  
     ```javascript
     props: {
       title: String,
@@ -1033,7 +1034,7 @@
       author: Object,
       callback: Function,
       contactsPromise: Promise // or any other constructor
-    }
+  }
     ```
 
     用途：这不仅为组件提供了文档，还会在它们遇到错误的类型时从浏览器的 JavaScript 控制台提示用户
@@ -1042,7 +1043,7 @@
 
     - 可以静态传值，也可以通过v-bind动态赋值
 
-    - 任何类型的值都可以穿给一个prop
+    - 任何类型的值都可以传给一个prop
 
   - 单向数据流
 
@@ -1057,7 +1058,7 @@
   - Prop验证
 
     为了定制 prop 的验证方式，你可以为 `props` 中的值提供一个带有验证需求的对象，而不是一个字符串数组
-
+  
     ```javascript
     Vue.component('my-component', {
       props: {
@@ -1091,7 +1092,7 @@
           }
         }
       }
-    })
+  })
     ```
 
     注意：prop 会在一个组件实例创建**之前**进行验证，所以实例的属性 (如 `data`、`computed` 等) 在 `default` 或 `validator` 函数中是不可用的
@@ -1099,35 +1100,35 @@
     - 类型检查
 
       - `type` 可以是下列原生构造函数中的一个：
-
+  
         - `String`
         - `Number`
         - `Boolean`
         - `Array`
         - `Object`
         - `Date`
-        - `Function`
+      - `Function`
         - `Symbol`
 
       - 另外，`type` 还可以是一个自定义的构造函数，并且通过 `instanceof` 来进行检查确认
 
         如构造函数
-
+  
         ```javascript
         function Person (firstName, lastName) {
           this.firstName = firstName
           this.lastName = lastName
-        }
+      }
         ```
 
         可以使用：
-
+  
         ```javascript
         Vue.component('blog-post', {
           props: {
             author: Person
           }
-        })
+      })
         ```
 
         来验证 `author` prop 的值是否是通过 `new Person` 创建的。
@@ -1141,16 +1142,18 @@
     - 禁用特性继承：如果你**不**希望组件的根元素继承特性，你可以在组件的选项中设置 `inheritAttrs: false`
 
       如：
-
+  
       ```javascript
       Vue.component('my-component', {
         inheritAttrs: false,
         // ...
-      })
+    })
       ```
 
+      $attrs--继承所有的父组件属性（除了prop传递的属性、class 和 style ）
+  
       用`inheritAttrs: false` 和 `$attrs`手动决定特性会被赋予哪个元素,在撰写[基础组件](https://cn.vuejs.org/v2/style-guide/#基础组件名-强烈推荐)的时候是常会用到的：
-
+      
       ```javascript
       Vue.component('base-input', {
         inheritAttrs: false,
@@ -1163,17 +1166,179 @@
               v-bind:value="value"
               v-on:input="$emit('input', $event.target.value)"
             >
+        </label>
+        `
+})
+      ```
+
+      注意: `inheritAttrs: false` 选项**不会**影响 `style` 和 `class` 的绑定
+  
+      这个模式允许你在使用基础组件的时候更像是使用原始的 HTML 元素，而不会担心哪个元素是真正的根元素：意思就是说属性都是从父组件传到子组件中的，不会在子组件中定义一次，这样写可以防止覆盖。
+    
+  
+- 自定义事件
+
+  - 事件名
+
+    - 事件名不存在任何自动化的大小写转换
+
+    - 触发的事件名需要完全匹配监听这个事件所用的名称
+
+    - 并且 `v-on` 事件监听器在 DOM 模板中会被自动转换为全小写 (因为 HTML 是大小写不敏感的)，所以 `v-on:myEvent` 将会变成 `v-on:myevent`
+
+    - 所以最佳命名：
+
+      **始终使用 kebab-case 的事件名**。
+
+  - 自定义组件的v-model注意事项
+
+    - 一个组件上的 `v-model` 默认会利用名为 `value` 的 prop 和名为 `input` 的事件
+
+    - 但是像单选框、复选框等类型的输入控件可能会将 `value` 特性用于[不同的目的](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Value)。
+
+    - 所以需要model来避免冲突
+
+      ```javascript
+      Vue.component('base-checkbox', {
+        model: { //加上model避免冲突
+          prop: 'checked',
+          event: 'change'
+        },
+        props: {
+          checked: Boolean //这里还是需要声明的
+        },
+        template: `
+          <input
+            type="checkbox"
+            v-bind:checked="checked"
+            v-on:change="$emit('change', $event.target.checked)"
+          >
+        `
+      })
+      ```
+
+  - 将原生事件绑定到组件中
+
+    - $listeners：将所有的事件监听器指向这个组件的某个特定的子元素
+
+      语法：
+
+      ```
+       v-on="$listeners"
+      ```
+
+    - 如何配合v-model？
+
+      ```javascript
+      Vue.component('base-input', {
+        inheritAttrs: false,
+        props: ['label', 'value'],
+        computed: {
+          inputListeners: function () {
+            var vm = this
+            // `Object.assign` 将所有的对象合并为一个新对象
+            return Object.assign({},
+              // 我们从父级添加所有的监听器
+              this.$listeners,
+              // 然后我们添加自定义监听器，
+              // 或覆写一些监听器的行为
+              {
+                // 这里确保组件配合 `v-model` 的工作
+                input: function (event) {
+                  vm.$emit('input', event.target.value)
+                }
+              }
+            )
+          }
+        },
+        template: `
+          <label>
+            {{ label }}
+            <input
+              v-bind="$attrs"
+              v-bind:value="value"
+              v-on="inputListeners"
+            >
           </label>
         `
       })
       ```
 
-      注意: `inheritAttrs: false` 选项**不会**影响 `style` 和 `class` 的绑定
+    - .sync
 
-      这个模式允许你在使用基础组件的时候更像是使用原始的 HTML 元素，而不会担心哪个元素是真正的根元素：???没看懂这个地方
+      当一个子组件改变了一个prop的值时，这个变化也会同步到父组件中所绑定。
+
+      使用：
+
+      在组件中表达对其赋新值的意图：
 
       ```
-      
+      this.$emit('update:value', newValue)
       ```
 
-      
+      然后父组件可以监听那个事件并根据需要更新一个本地的数据属性
+
+      ```
+       v-bind:value="value"
+       v-on:update:value="value = $event"
+      ```
+
+      缩写
+
+      ```
+      :value.sync="v-bind"
+      ```
+
+- 插槽
+
+- 动态组件、异步组件
+
+- 处理边界情况
+
+#### 路由
+
+- 什么是路由？
+
+  后端路由：对于普通的网站，所有的超链接都是URL地址，所有的URL地址都对应服务器上相应的资源
+
+  前端路由：对于单页面应用程序来说，主要通过URL中的hash(#)来实现不同页面之间的跳转。同时hash有一个特点，http请求不会包含hash相关的内容。所以，单页面程序中的页面跳转主要由hash实现，而这种切换页面的方式就叫前端路由
+
+- 基本使用
+
+  1. 安装路由
+  2. 创建一个VueRouter对象
+  3. 书写匹配规则
+  4. 将路由规则对象注册到Vue实例上，用来监听url地址的变化，然后展示对应的属性
+  5. 添加router-view
+
+- router-link标签
+
+  - vue-router提供用来简化a标签
+
+  - 通过tag更改渲染成其他的标签
+
+- 重定向 redirect
+
+- 动画 在router-view外套一层
+
+- 传参 
+
+  qurey
+
+  通过$route.query获取参数
+
+  params
+
+  通过$route.params获取参数
+
+- 嵌套
+
+  - 使用children属性，实现子路由。
+  - 子路由的path前面，不要带/,否则永远以根路径开始请求，这样不方便用户去理解url地址。
+  - 注意：在子模块里面引用子路由 也需要router-view
+
+- 命名视图布局
+
+  - components 对应一个对象 name:component 
+  - router-view 中使用name指定component
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    <title>路由嵌套</title>
+
+</head>
+
+<body>
+
+    <div id="app">
+        <router-view ></router-view>
+        <router-view name="left"></router-view>
+        <router-view name="main"></router-view>
+    </div>
+
+
+    <script>
+
+        var header = {
+            template: `<h2 class="head">头部</h2>`
+        }
+
+        var leftbox = {
+            template: `<h2 class="leftbox">侧边栏</h2>`
+        }
+        
+        var mainbox = {
+            template: `<h2 class="mainbox">主体</h2>`
+        }
+
+        var routerObj = new VueRouter({
+            routes: [
+                {
+                    path: '/', components: {
+                        'default':header,
+                        'left':leftbox,
+                        'main':mainbox
+                    }
+                },
+            ]
+        })
+
+        new Vue({
+            el: "#app",
+            data: {
+
+            },
+            router: routerObj
+        })
+
+    </script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ch-zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>组件注册</title>
+</head>
+
+<body>
+    <div id="app">
+
+        <mtitle :title="title">
+        </mtitle>
+
+        <component-lock-a :title="titleA">
+
+        </component-lock-a>
+
+        <component-lock-b :title="titleB">
+            
+        </component-lock-b>
+    </div>
+
+    <script>
+
+        Vue.component('mtitle', {
+            props: ['title'],
+            template: `
+            <h1>{{title}}</h1>
+            `
+        })
+
+        var ComponentLockA = {
+            props: ['title'],
+            template: `
+            <p>{{title}}</p>
+            `
+        }
+
+        var ComponentLockB = {
+            props: ['title'],
+            template: `
+            <p>
+            {{title}}
+            <component-lock-a :title="titlea"></component-lock-a>
+            </p>
+            `,
+            data(){
+                return {
+                    titlea:"b里面的子布局"
+                }
+            },
+            components: {
+                'component-lock-a': ComponentLockA,
+            }
+        }
+
+
+        new Vue({
+            el: "#app",
+            data: {
+                title: "全局注册",
+                titleA: "局部注册A",
+                titleB: "局部注册B"
+            },
+            components: {
+                'component-lock-a': ComponentLockA,
+                'component-lock-b': ComponentLockB,
+            }
+        })
+    </script>
+</body>
+
+</html>

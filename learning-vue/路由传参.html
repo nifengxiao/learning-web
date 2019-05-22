@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    <title>路由传参</title>
+
+</head>
+<body>
+    
+    <div id="app">
+      
+        <router-link to="/login?id=10&name=小明">登陆</router-link>
+        <router-link to="/register/12/小A">注册</router-link>
+
+        <router-view></router—view>
+    </div>
+
+    <script>
+        var login = {
+            template:`<h1>登录--- {{$route.query.id}}---- {{$route.query.name}}</h1>`,
+            created(){
+                // console.log(this.$route)
+                console.log(this.$route.query.id)
+            }
+        }
+
+        var register = {
+            template:`<h1>注册--- {{$route.params.id}}---- {{$route.params.name}}</h1>`,
+            created(){
+                // console.log(this.$route)
+                console.log(this.$route.params.id)
+            }
+        }
+
+        var routerObj = new VueRouter({
+            routes:[
+                {path:'/login',component:login},
+                {path:'/register/:id/:name',component:register},
+                {path:'/',redirect:'login'},
+            ] 
+        })
+
+        new Vue({
+            el:"#app",
+            data:{
+
+            },
+            router:routerObj 
+        })
+
+    </script>
+
+
+
+</body>
+</html>

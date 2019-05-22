@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 1.安装 -->
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    <title>路由的简单使用</title>
+
+    <style>
+         /* 高亮两种方式 */
+        .router-link-active ,.myactive{
+            color: red;
+            font-weight:100;
+            background-color: aquamarine
+        }
+
+           
+        /* 加个过渡动画 */
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateX(100px);
+        }
+
+        .v-enter-active,
+        .v-leave-active{
+            transition:all 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <!-- <a href="#/login">登陆</a>
+        <a href="#/register">注册</a> -->
+        
+        <!-- router-link默认展示为a标签， 可以通过tag更改渲染成其他的标签 -->
+        <router-link to="/login">登陆</router-link>
+        <router-link to="/register">注册</router-link>
+
+        <!-- 5. 这是vue-router提供的元素，用来当作占位符，路由规则匹配到的组件，就会展示到这个元素中 -->
+        <!-- <router-view></router—view> -->
+
+        <!-- 加个动画 -->
+        <transition mode="out-in">
+             <router-view></router—view>
+        </transition>
+    </div>
+
+    <script>
+        var login = {
+            template:`<h1>登录</h1>`
+        }
+
+        var register = {
+            template:`<h1>注册</h1>`
+        }
+
+        //2.创建一个VueRouter对象
+        var routerObj = new VueRouter({
+            //3.书写匹配规则
+            routes:[
+                //属性1：path,表示监听哪个路由链接地址
+                //属性2: 是component,表示，如果路由是前面匹配到的path,则展示component属性对应的组件
+                //注意：component 的属性值,必须是一个组件的模板对象，不能是组件的引用名称
+                {path:'/login',component:login},
+                {path:'/register',component:register},
+                //重定向 注意：这里的redirect和node中的redirect完全两码事
+                {path:'/',redirect:'login'},
+            ] ,//这个配置对象中的routes表示匹配规则
+            //通过更改linkActiveClass来指定选中的class名
+            linkActiveClass:'myactive'
+        })
+
+        new Vue({
+            el:"#app",
+            data:{
+
+            },
+            router:routerObj //4. 将路由规则对象注册到Vue实例上，用来监听url地址的变化，然后展示对应的属性
+        })
+
+    </script>
+
+
+
+</body>
+</html>

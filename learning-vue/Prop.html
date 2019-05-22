@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <my-component :num="num">
+        </my-component>
+        <my-component2 :num="num">
+        </my-component2>
+        <my-component3 :str="str">
+        </my-component3>
+        <base-input v-model="username" required placeholder="Enter your username"></base-input>
+        <p>{{username}}</p>
+    </div>
+
+    <script>
+
+        //限制类型为Number
+        Vue.component('my-component', {
+            props: {
+                num: Number
+            },
+            template: `
+            <div>
+                <h1>{{num}}</h1>
+            </div>
+            `
+        })
+
+        //不能在子组件内部对prop的值进行修改，以下是想要改变的解决方案
+        //场景1： 把prop的值作为本地数据使用,需要用一个本地值来接受
+        Vue.component('my-component2', {
+            props: {
+                num: Number
+            },
+            data() {
+                return {
+                    locNum: this.num
+                }
+            },
+            //这样是不行的
+            // template: `
+            // <div>
+            //     <h1>{{this.num=200}}</h1>
+            // </div>
+            // `
+            //这样是ok的
+            template: `
+            <div>
+                <h1>{{this.locNum=200}}</h1>
+            </div>
+            `
+        })
+
+        //prop需要转换，最好用计算属性
+        Vue.component('my-component3', {
+            props: ['str'],
+            computed: {
+                locStr: function () {
+                    return this.str.trim().toUpperCase()
+                }
+            },
+            template: `
+            <div>
+                <h1>{{this.locStr}}</h1>
+            </div>
+            `
+        })
+
+        //测试非Prop特性
+        Vue.component('base-input', {
+            inheritAttrs: false, //此处设置禁用继承特性 （只继承class属性）
+            props: ['label', 'value'],
+            template: `
+            <label>
+              {{ label }}
+              <input
+                v-bind="$attrs"
+                v-bind:value="value"
+                v-on:input="$emit('input', $event.target.value)"
+              >
+            </label>
+            `
+        })
+
+        new Vue({
+            el: "#app",
+            data: {
+                num: 222,
+                str: "abcd",
+                username:""
+            }
+        })
+
+    </script>
+</body>
+
+</html>

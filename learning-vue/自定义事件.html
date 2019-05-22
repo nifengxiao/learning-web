@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ch-zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>自定义事件</title>
+</head>
+
+<body>
+    <div id="app">
+        <base-checkbox v-model="lovingVue"></base-checkbox>
+        <p>{{lovingVue}}</p>
+        <base-input v-model="input" v-on:keyup.enter="onPageDown"></base-input>
+        <p>{{input}}</p>
+    </div>
+
+    <script>
+
+        //使用model避免和value冲突
+        Vue.component('base-checkbox', {
+            model: {
+                prop: 'checked',
+                event: 'change'
+            },
+            props: {
+                checked: Boolean
+            },
+            template: `
+                <input
+                  type="checkbox"
+                  v-bind:checked="checked"
+                  v-on:change="$emit('change', $event.target.checked)"
+                >
+            `
+        })
+        
+        //this.$listeners使用所有的事件监听器指向这个组件的某个特定的子元素
+        Vue.component('base-input', {
+            inheritAttrs: false,
+            props: ['label', 'value'],
+            computed: {
+                inputListeners: function () {
+                    var vm = this
+                    // `Object.assign` 将所有的对象合并为一个新对象
+                    return Object.assign({},
+                        // 我们从父级添加所有的监听器
+                        this.$listeners,
+                        // 然后我们添加自定义监听器，
+                        // 或覆写一些监听器的行为
+                        {
+                            // 这里确保组件配合 `v-model` 的工作
+                            input: function (event) {
+                                vm.$emit('input', event.target.value)
+                            }
+                        }
+                    )
+                }
+            },
+            template: `
+                <label>
+                  {{ label }}
+                  <input
+                    v-bind="$attrs"
+                    v-bind:value="value"
+                    v-on="inputListeners"
+                  >
+                </label>
+            `
+        })
+
+        new Vue({
+            el: "#app",
+            data: {
+                lovingVue: false,
+                input:"",
+                onFocus:true
+            },
+            methods:{
+                onPageDown(){
+                   this.lovingVue = !this.lovingVue;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
