@@ -167,7 +167,7 @@
   	2. 数组中使用三元表达式
   	3. 数组中嵌套对象
   	4. 直接使用对象
-								   - 注意
+											   - 注意
   	     - 可以在data中定义这个对象，然后使用
   
 - 使用内联表达式
@@ -600,6 +600,20 @@
 
 #### 组件基础
 
+- 什么是组件
+
+  用来拆分Vue实例的代码量，能够让我们以不同的组件，来划分不同的功能模块。
+
+- 组件化和模块化的区别？
+
+  - 组件化：
+
+    从ui界面的角度划分，前端的组件化，方便ui组件的重用。
+
+  - 模块化
+
+    从代码逻辑的角度进行划分的。方便代码分层开发，保证每个功能模块的职能单一。
+
 - 注册
 
   ```javascript
@@ -969,6 +983,7 @@
     ```javascript
   var ComponentA = { /* ... */ }
     var ComponentB = { /* ... */ }
+    ```
   ```
   
   初始化：
@@ -981,7 +996,7 @@
       'component-b': ComponentB
       }
     })
-    ```
+  ```
   
     注意：**局部注册的组件在其子组件中不可用**
   
@@ -1092,7 +1107,7 @@
           }
         }
       }
-  })
+    })
     ```
 
     注意：prop 会在一个组件实例创建**之前**进行验证，所以实例的属性 (如 `data`、`computed` 等) 在 `default` 或 `validator` 函数中是不可用的
@@ -1108,39 +1123,44 @@
         - `Object`
         - `Date`
       - `Function`
-        - `Symbol`
-
-      - 另外，`type` 还可以是一个自定义的构造函数，并且通过 `instanceof` 来进行检查确认
-
-        如构造函数
-  
+    
+  - `Symbol`
+    
+  - 另外，`type` 还可以是一个自定义的构造函数，并且通过 `instanceof` 来进行检查确认
+    
+      如构造函数
+      
         ```javascript
         function Person (firstName, lastName) {
           this.firstName = firstName
           this.lastName = lastName
       }
         ```
-
-        可以使用：
-  
+    
+      可以使用：
+    
         ```javascript
         Vue.component('blog-post', {
           props: {
             author: Person
           }
       })
-        ```
-
-        来验证 `author` prop 的值是否是通过 `new Person` 创建的。
-
-  - 非Prop特性
-
-    - 一个非 prop 特性是指传向一个组件，但是该组件并没有相应 prop 定义的特性。
-
-    - 对于绝大多数相同属性,从外部提供给组件的值会替换掉组件内部设置好的值，`class`和 `style` 特性会稍微智能一些，即两边的值会被合并起来
-
-    - 禁用特性继承：如果你**不**希望组件的根元素继承特性，你可以在组件的选项中设置 `inheritAttrs: false`
-
+      ```
+    
+      来验证 `author` prop 的值是否是通过 `new Person` 创建的。
+    
+    ```
+    
+    ```
+  
+- 非Prop特性
+  
+  - 一个非 prop 特性是指传向一个组件，但是该组件并没有相应 prop 定义的特性。
+  
+  - 对于绝大多数相同属性,从外部提供给组件的值会替换掉组件内部设置好的值，`class`和 `style` 特性会稍微智能一些，即两边的值会被合并起来
+  
+  - 禁用特性继承：如果你**不**希望组件的根元素继承特性，你可以在组件的选项中设置 `inheritAttrs: false`
+  
       如：
   
       ```javascript
@@ -1148,12 +1168,12 @@
         inheritAttrs: false,
         // ...
     })
-      ```
-
+    ```
+  
       $attrs--继承所有的父组件属性（除了prop传递的属性、class 和 style ）
   
       用`inheritAttrs: false` 和 `$attrs`手动决定特性会被赋予哪个元素,在撰写[基础组件](https://cn.vuejs.org/v2/style-guide/#基础组件名-强烈推荐)的时候是常会用到的：
-      
+    
       ```javascript
       Vue.component('base-input', {
         inheritAttrs: false,
@@ -1167,10 +1187,10 @@
               v-on:input="$emit('input', $event.target.value)"
             >
         </label>
-        `
-})
+      `
+  })
       ```
-
+  
       注意: `inheritAttrs: false` 选项**不会**影响 `style` 和 `class` 的绑定
   
       这个模式允许你在使用基础组件的时候更像是使用原始的 HTML 元素，而不会担心哪个元素是真正的根元素：意思就是说属性都是从父组件传到子组件中的，不会在子组件中定义一次，这样写可以防止覆盖。
@@ -1342,3 +1362,113 @@
   - components 对应一个对象 name:component 
   - router-view 中使用name指定component
 
+#### methods、computed、watch
+
+- computed
+
+  - 计算属性 computed 计算属性本质是一个方法，只不过我们在使用的时候，是把他们的名称直接当作属性来使用的
+
+  - 注意：
+    1. 使用的时候直接用名称
+    2. 计算属性这个function内部用到的任何data中的数据发生了变化，就会重新计算属性的值
+    3. 计算属性的结果是会被缓存的，方便下次使用
+
+- watch
+
+  - 可以监视data中指定数据的变化
+  - 注意：
+    1. 方法名为所监听的属性名
+    2. 有两个形参，newVal和oldVal
+
+- 对比
+  - methods 主要书写具体的业务逻辑
+  - computed 属性结果会被缓存，依赖的响应式属性变化时才会重新计算，主要当作属性来使用
+  - watch 主要用来监听某些特定数据的变化，从而进行某些具体的业务操作
+
+#### webpack
+
+- 在网页中会引用到哪些常见的静态资源？
+
+  - js
+
+    .js .jsx .coffee .ts(TypeScript 类 c# 语言)
+
+  - css
+
+    .css .less. sass .scss
+
+  - images
+
+    .jpg .png .gif .bmp .svg
+
+  - 字体文件
+
+    .svg .ttf .eot .woff .woff2
+
+  - 模板文件
+
+    .ejs .jade .vue
+
+- 网页中引入的静态资源过多会有什么问题？
+
+  1. 网页加载速度慢，因为我们要发起很多二次请求
+  2. 要处理错综复杂的依赖关系
+
+- 如何处理？
+
+  1. 合并、压缩、精灵图、图片的base64编码
+  2. 可以使用webpack解决各个包之间的复杂依赖关系
+
+- 什么是webpack？
+
+  webpack是前端的一个项目构建工具，它是基于node.js开发出来的一个前端工具
+
+- 如何完美解决上述2种解决方案？
+
+  - 使用Gulp，是基于task任务的
+  - 使用Webpack,是基于整个项目进行构建的
+    - 可以完美实现资源的合并、打包、压缩、混淆等等
+
+- webpack安装
+
+  - 全局安装命令：npm i webpack -g
+  - 在项目根目录中运行 npm i webpack --save-dev安装到项目依赖
+
+- webpack具体可以做什么？
+
+  - webpack 能够处理js文件的相互依赖关系
+  - webpack能够处理js兼容性问题，把高级的、浏览器不识别的语法转成浏览器能识别的语法
+
+- 初始化项目：
+
+  npm init -y
+
+- 命令
+
+  - webpack 要打包的文件路径  输入的文件路径
+
+  - 直接使用webpack 
+
+    需要在根路径配置webpack.config.js 
+
+  - webpack-dev-server 自动打包编译
+
+    - 使用
+
+      1. 安装 ： npm i webpack-dev-server -D 
+      2. 用法和webpack用法一样
+      3. 在package.json的scripts下，添加"dev":"webpack-dev-	server"
+      4. 运行：npm run dev
+      5. 把引入的路径改成根路径
+    
+    - 注意:
+      - webpack-dev-server这个工具，如果想要正常运行，要求在本地项目中必须安装webpack，全局都不得行
+      - 在npm run dev 中 会看到webpack output is served from / 意思是webpack的输出路径正托管于我们的根路径，所以要把这时输出路径会变成根路径
+      - webpack-dev-server帮我们打包生成输出文件，并没有存放到实际的物理磁盘上，而是直接托管到了电脑的内存中，所以，我们在项目根目录中根本找不到输出的文件。
+      - 为何不写到磁盘中？为了提升速度。
+    - 实用命令
+      - --open 自动打开浏览器
+      - --port xx 设置启动时候的运行端口
+      - --contentBase xx  指定托管的根目录
+      - --hot  启用热更新
+    - 

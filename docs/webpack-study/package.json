@@ -1,0 +1,16 @@
+{
+  "name": "webpack-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": " webpack-dev-server --open --port 3000 --contentBase src --hot"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack-dev-server": "^3.4.1"
+  }
+}

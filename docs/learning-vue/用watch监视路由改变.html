@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    <title>用watch监听路由改变</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <router-link to="/login">登陆</router-link>
+        <router-link to="/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+
+    <script>
+        var login = {
+            template: `<h1>登录</h1>`
+        }
+
+        var register = {
+            template: `<h1>注册</h1>`
+        }
+
+        
+        var router = new VueRouter({
+            routes: [
+                { path: '/login', component: login },
+                { path: '/register', component: register },
+                { path: '/', redirect: 'login' },
+            ]
+        })
+
+        new Vue({
+            el: "#app",
+            data: {
+
+            },
+            router,
+            watch: {
+                '$route.path'(newVal, oldVal) {
+                    switch (newVal) {
+                        case '/login':
+                            console.log
+                            console.log('欢迎进入登录界面')
+                            break;
+                        case '/register':
+                            console.log('欢迎进入注册界面')
+                            break;
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

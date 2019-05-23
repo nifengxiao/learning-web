@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">   
+        <!-- <input type="text" v-model="firstname" @keyup="getFullname">
+        +
+        <input type="text" v-model="lastname" @keyup="getFullname">
+        =
+        <input type="text" v-model="fullname"> -->
+
+
+        <input type="text" v-model="firstname" >
+        +
+        <input type="text" v-model="lastname">
+        =
+        <input type="text" v-model="fullname">
+    </div>
+
+    <script>
+        //名称拼接案例
+        //方式1 用@keyup监听键盘事件
+
+        //方式2 用watch属性，监听数据变化
+
+        //方式3 计算属性 computed 
+
+        //computed 计算属性本质是一个方法，只不过我们在使用的时候，是把他们的名称直接当作属性来使用的
+        //注意1：使用的时候直接用名称
+        //注意2：计算属性这个function内部用到的任何data中的数据发生了变化，就会重新计算属性的值
+        //注意3：计算属性的结果是会被缓存的，方便下次使用
+
+
+        //对比
+        //methods 主要书写具体的业务逻辑
+        //computed 属性结果会被缓存，依赖的响应式属性变化时才会重新计算，主要当作属性来使用
+        //watch 主要用来监听某些特定数据的变化，从而进行某些具体的业务操作
+
+        new Vue({
+            el:"#app",
+            data:{
+                firstname:"",
+                lastname:"",
+                // fullname:""
+            },
+            // watch:{//watch属性，可以监视data中指定数据的变化
+            //     //可以有两个形参
+            //     firstname(newVal,oldVal){ 
+            //         this.fullname = `${newVal}-${this.lastname}`
+            //     },
+            //     lastname(){
+            //         this.fullname = `${this.firstname}-${this.lastname}`
+            //     }
+            // },
+            // methods:{
+            //     getFullname(){
+            //         this.fullname = `${this.firstname}-${this.lastname}`
+            //     }
+            // },
+            computed:{
+                fullname(){
+                    return `${this.firstname}-${this.lastname}`
+                }
+            }
+        })
+    </script>
+</body>
+</html>
