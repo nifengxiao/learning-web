@@ -1,0 +1,17 @@
+ul{
+    background-color: cadetblue;
+}
+
+.t{
+    background: url("../images/3.jpg");
+    background-size: cover;
+    height: 100px;
+    width: 100px;
+}
+
+.t2{
+    background: url("../images2/3.jpg");
+    background-size: cover;
+    height: 100px;
+    width: 100px;
+}

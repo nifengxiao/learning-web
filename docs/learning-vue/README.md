@@ -167,7 +167,7 @@
   	2. 数组中使用三元表达式
   	3. 数组中嵌套对象
   	4. 直接使用对象
-											   - 注意
+																   - 注意
   	     - 可以在data中定义这个对象，然后使用
   
 - 使用内联表达式
@@ -1145,7 +1145,7 @@
             author: Person
           }
       })
-      ```
+        ```
     
       来验证 `author` prop 的值是否是通过 `new Person` 创建的。
     
@@ -1432,43 +1432,323 @@
 - webpack安装
 
   - 全局安装命令：npm i webpack -g
-  - 在项目根目录中运行 npm i webpack --save-dev安装到项目依赖
+  - 在项目根目录中运行 npm i webpack -D安装到项目依赖
 
 - webpack具体可以做什么？
 
   - webpack 能够处理js文件的相互依赖关系
   - webpack能够处理js兼容性问题，把高级的、浏览器不识别的语法转成浏览器能识别的语法
 
-- 初始化项目：
+- 如何使用：
 
-  npm init -y
+  1. 初始化项目：
 
-- 命令
+     ```
+     npm init -y
+     ```
 
-  - webpack 要打包的文件路径  输入的文件路径
+  2. 在项目中新建 src目录 src目录里面创建一个main.js作为入口，再创建一个index.html作为主页
 
-  - 直接使用webpack 
+     ![image](https://raw.githubusercontent.com/nifengxiao/learning-web/master/screenshot/image.mlorn2v0ql.png)
 
-    需要在根路径配置webpack.config.js 
+  3. - 打包方式1：通过webpack指定路径进行打包：
 
-  - webpack-dev-server 自动打包编译
+       ```
+       webpack 要打包的文件路径  --output  输入的文件路径
+       ```
 
-    - 使用
+     - 打包方式2：
 
-      1. 安装 ： npm i webpack-dev-server -D 
-      2. 用法和webpack用法一样
-      3. 在package.json的scripts下，添加"dev":"webpack-dev-	server"
-      4. 运行：npm run dev
-      5. 把引入的路径改成根路径
+       通过配置webpack.config.js指定路径
+
+       ```javascript
+       const path = require('path')
+       
+       module.exports = {
+           entry: path.join(__dirname,'./src/main.js'),
+           output: {
+               path: path.join(__dirname,"./dist"),
+               filename: 'bundle.js'
+           }
+       }
+       ```
+
+       用命令webpack打包
+
+       ```
+       webpack
+       ```
+
+     - 打包方式3：使用webpack-dev-server自动打包
+
+       1. 安装
+
+          ```
+          npm i webpack-dev-server -D 
+          ```
+
+          如果提示需要安装webpack依赖项
+
+          ```
+          npm i webpack -D 
+          ```
+
+       2. 在package.json的scripts下，添加"dev":"webpack-dev-server"
+       
+          ```
+          "dev":"webpack-dev-server"
+          ```
+       
+       3. 把引入的路径改成根路径
+       
+          ```
+          <script src="/bundle.js"></script>
+          ```
+       
+       4. 使用
+       
+          ```
+          npm run dev
+          ```
+       
+       5. 可配置命令
+       
+          - open 自动打开浏览器
+       
+          - port 设置启动时候的运行端口
+       
+          - contentBase 指定托管的根目录
+       
+          - hot  启用热更新
+       
+            如何配置?
+       
+            - 第一种方式：直接在package.json配置的dev脚本后面追加（推荐方式）
+       
+              ```javascript
+              "dev": " webpack-dev-server --open --port 3000 --contentBase src --hot"
+              ```
+       
+            - 第二种方式：在webpack.config.js中配置
+       
+              在module.exports下
+       
+              ```
+              devServer:{
+                	open:true, //自动打开浏览器
+                	port:3000, //设置启动时候的运行端口
+              	contentBase:'src',  //指定托管的根目录
+              }
+              ```
+       
+              如果要启用热更新
+       
+              1. 导入webpack
+       
+                 ```javascript
+                 const webpack = require('webpack')；
+                 ```
+       
+              2. 在module.exports下添加插件
+       
+                 ```javascript
+                 plugins:[ 
+                   	        new webpack.HotModuleReplacementPlugin()
+                 ]
+                 ```
+       
+              3. 在module.exports下的devServer中启用
+       
+                 ```javascript
+                 hot:true    //启用热更新
+                 ```
+
+  4. 引入html-webpack-plugin指定生成页面
+
+     1. 安装:
+
+        ```
+        npm i html-webpack-plugin -D
+        ```
+
+     2. 在webpack.config.js中进行配置
+
+        导入：
+
+        ```
+        const htmlWebpackPlugin = require("html-webpack-plugin")
+        ```
+
+        在module.exports中的plugins下new一个htmlWebpackPlugin对象，指定模板页面生成内存中的页面。
+
+        ```javascript
+        new htmlWebpackPlugin({
+                    template: path.join(__dirname, "./src/index.html"), //指定模板页面
+                    filename: 'index.html' //指定页面的生成
+        })
+        ```
+
+        这个时候可以注释掉index.html中对于bundle.js的引入了
+
+  5. 使用loader引入css 
+
+     1. 安装
+
+        - 安装 css
+
+          ```
+          npm i style-loader css-loader -D
+          ```
+
+        - 如果要使用less
+
+          ```
+          npm i style-loader css-loader less-loader less -D
+          ```
+
+        - 如果要使用sass
+
+          ```
+          npm i style-loader css-loader sass-loader node-sass -D
+          ```
+
+     2. 在webpack.config.js 这个配置文件，新增一个配置节点，叫做module，它是一个对象，在这个module对象上，有个rules属性，这个rules属性是个数组，这个数组中存放了所有第三方文件的匹配和处理规则。
+
+        ```javascript
+     module:{   
+                rules:[
+             	//css
+                    {test:/\.css$/,use:['style-loader','css-loader']},
+                    //less
+                    {test:/\.less$/,use:['style-loader','css-loader','less-loader']},
+                    //sass
+                    {test:/\.scss$/,use:['style-loader','css-loader','sass-loader']}
+                ]
+            }
+        ```
+     
+     3. 这个时候就可以在main.js中导入了
+     
+        ```javascript
+        import './css/index.css'
+        import './css/index.less'
+        import './css/index.scss'
+        ```
+     
+  6. 使用loader引入url
+
+     1. 安装
+
+        ```
+        npm i url-loader file-loader -D
+        ```
+
+     2. 配置匹配规则
+
+        ```
+        {test:/\.(jpg|png|bmp|jpeg)$/,use:['url-loader]}
+        ```
+
+     3. 参数
+
+        - limit 和 name
+
+          ```
+          {test:/\.(jpg|png|bmp|jpeg)$/,use:'url-loader?limit=8750&name=[hash:8]-[name].[ext]'}
+          ```
+
+        - 说明：
+
+          - limit给定的值是图片的大小，单位是byte，如果我们引用的图片大于或等于给定limit值，则不会被转为base64格式的字符串，如果图片小于给定的limit值，则会被转为base64的字符串
+          - name参数用来重命名   [hash:8] 代表只取8位hash值  [name]取原名称 [ext]取原扩展名 （注意：如果name存在一样，后面读取的会覆盖前面的）
+        
+     4. 字体
+     
+        ```javascript
+         {test:/\.(ttf|eot|svg|woff|woff2)$/,use:'url-loader'}, //处理字体文件
+        ```
+     
+     5. 使用babel引入es6以上语法
+     
+        安装提供转换功能的包
+     
+        ```
+        npm i babel-core babel-loader babel-plugin-transform-runtime -D 
+        ```
+     
+        安装提供语法对应关系的包
+     
+        ```
+        npm i babel-preset-env babel-preset-stage-0 -D  
+        ```
+     
+        安装完了之后还需要提供babel7的依赖库（这一步有待改善）
+     
+        ```
+        npm i babel-loader@7  @babel/core -D 
+        ```
+     
+        打开webpack的配置文件，在module节点下的rules数组中，添加一个新的匹配规则
+     
+        ```javascript
+        {test:/\.js$/,use:'babel-loader',exclude:/node_modules/}
+        ```
+     
+        在项目的根目录中，新建一个叫做.babelrc的babel配置文件，这个配置文件，属于json格式,在.babelrc 写如下配置
+     
+        ```
+        {
+              "presets":["env","stage-0"],
+              "plugins":["transform-runtime"] 
+        }
+        ```
+     
+        说明：在配置babel的loader规则的时候，必须把node_modules目录，通过exclude排除的原因有两个
+     
+        - 如果不排除node_modules,则Babel会把node_modules中所有的第三方js都打包编译，这样会非常消耗cpu，同时，打包速度会非常慢
+     
+        - 哪怕，最终，Babel把所有node_modules中的js转换完了，项目也无法运行
+     
+        
+
+- 注意事项：
+
+  - 关于webpack
+
+    当我们在控制台直接输入webpack命令执行的时候，webpack做了以下操作
+
+    	1. 首先，webpack发现，我们没有给它指定入口和出口
+     	2. webpack就会去项目的根目录中查找配置文件
+     	3. 通过解析执行配置文件，得到配置对象
+     	4. 当webpack拿到配置对象后，就拿到了配置对象中，指定的入口和出口，然后进行打包构建
     
-    - 注意:
-      - webpack-dev-server这个工具，如果想要正常运行，要求在本地项目中必须安装webpack，全局都不得行
-      - 在npm run dev 中 会看到webpack output is served from / 意思是webpack的输出路径正托管于我们的根路径，所以要把这时输出路径会变成根路径
-      - webpack-dev-server帮我们打包生成输出文件，并没有存放到实际的物理磁盘上，而是直接托管到了电脑的内存中，所以，我们在项目根目录中根本找不到输出的文件。
-      - 为何不写到磁盘中？为了提升速度。
-    - 实用命令
-      - --open 自动打开浏览器
-      - --port xx 设置启动时候的运行端口
-      - --contentBase xx  指定托管的根目录
-      - --hot  启用热更新
-    - 
+  - 关于webpack-dev-server
+
+    - webpack-dev-server这个工具，如果想要正常运行，要求在本地项目中必须安装webpack
+    - 在npm run dev 中 会看到webpack output is served from / 意思是webpack的输出路径正托管于我们的根路径，所以要把这时输出路径会变成根路径
+    - webpack-dev-server帮我们打包生成输出文件，并没有存放到实际的物理磁盘上，而是直接托管到了电脑的内存中，所以，我们在项目根目录中根本找不到输出的文件。
+    - 为何不写到磁盘中？为了提升速度。
+
+  - html-webpack-plugin
+
+    用途：
+
+      - 自动在内存中根据指定页面生成一个内存的页面
+    - 自动把打包好的bundle.js追加到页面中去
+
+  - loader加载器
+
+     - webpack，默认只能打包处理js类型的文件，无法处理其他的非js类型的文件
+
+       如果要处理非js类型的文件，我们需要手动安装一些第三方的loader加载器
+
+     - webpack处理第三方文件类型的过程
+
+       1. 发现这个要处理的文件不是js文件，然后就去配置文件中，查找有没有对应的第三方loader规则
+       2. 如果能找到对应的规则，就会调用对应的loader处理这种文件类型
+
+       3. 当调用loader的时候，是从后往前调用的
+
+       4. 当最后一个loader调用完毕，会把处理的结构，直接交给webpack进行打包合并，最终输出到bundle.js中去
+  
+  
